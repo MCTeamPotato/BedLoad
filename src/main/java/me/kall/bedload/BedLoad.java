@@ -100,4 +100,9 @@ public final class BedLoad {
         if (server != null) return Optional.of(server.getPlayerList().getPlayers());
         return Optional.empty();
     }
+
+    public static void note(int chunkX, int chunkZ, int radius, boolean added) {
+        Component component = Component.translatable(added ? "info.bedload.add" : "info.bedload.remove", chunkX, chunkZ, radius);
+        players().ifPresent(players -> players.forEach(player -> player.displayClientMessage(component, false)));
+    }
 }

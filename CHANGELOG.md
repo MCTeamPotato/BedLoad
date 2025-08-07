@@ -1,2 +1,2 @@
-# 1.1.0 
-Support radius configuration
+# 1.1.1
+Some minor improvements on logging.
