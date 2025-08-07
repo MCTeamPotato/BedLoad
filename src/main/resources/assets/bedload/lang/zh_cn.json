@@ -1,5 +1,5 @@
 {
   "info.bedload": "BedLoad 配置文件已重载。你需要重新放置方块才能将它们重新初始化为区块加载器。",
-  "info.bedload.remove": "[%s, %s] 区块已从强制加载列表中移除。",
-  "info.bedload.add": "[%s, %s] 区块已进入强制加载列表。"
+  "info.bedload.add": "已添加以 (%s, %s) 为中心、半径为 %s 的区块到加载列表",
+  "info.bedload.remove": "已从加载列表移除以 (%s, %s) 为中心、半径为 %s 的区块"
 }

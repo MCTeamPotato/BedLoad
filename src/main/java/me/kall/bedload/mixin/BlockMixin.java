@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.Unique;
 @Mixin(Block.class)
 public class BlockMixin implements ChunkLoader {
     @Unique private boolean bedLoad$isChunkLoader;
+    @Unique private int bedLoad$chunkLoadRadius;
 
     @Override
     public boolean bedLoad$isChunkLoader() {
@@ -18,4 +19,15 @@ public class BlockMixin implements ChunkLoader {
     public void bedLoad$setIsChunkLoader(boolean isChunkLoader) {
         this.bedLoad$isChunkLoader = isChunkLoader;
     }
+
+    @Override
+    public int bedLoad$getChunkLoadRadius() {
+        return this.bedLoad$chunkLoadRadius;
+    }
+
+    @Override
+    public void bedLoad$setChunkLoadRadius(int radius) {
+        this.bedLoad$chunkLoadRadius = radius;
+    }
+
 }

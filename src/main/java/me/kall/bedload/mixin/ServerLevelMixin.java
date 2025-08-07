@@ -22,13 +22,28 @@ public abstract class ServerLevelMixin {
     private void onChunkLoaderUpdate(BlockPos pos, BlockState oldState, BlockState newState, CallbackInfo ci) {
         int chunkX = SectionPos.blockToSectionCoord(pos.getX());
         int chunkZ = SectionPos.blockToSectionCoord(pos.getZ());
-        if (((ChunkLoader)oldState.getBlock()).bedLoad$isChunkLoader()) {
-            this.setChunkForced(chunkX, chunkZ, false);
-            if (BedLoadConfig.SHOW_MESSAGE.get()) BedLoad.players().ifPresent(players -> players.forEach(player -> player.displayClientMessage(Component.translatable("info.bedload.remove", String.valueOf(chunkX), String.valueOf(chunkZ)), false)));
+
+        ChunkLoader oldLoader = (ChunkLoader) oldState.getBlock();
+        ChunkLoader newLoader = (ChunkLoader) newState.getBlock();
+
+        if (oldLoader.bedLoad$isChunkLoader()) {
+            int radius = oldLoader.bedLoad$getChunkLoadRadius();
+            for (int dx = -radius; dx <= radius; dx++) {
+                for (int dz = -radius; dz <= radius; dz++) {
+                    this.setChunkForced(chunkX + dx, chunkZ + dz, false);
+                }
+            }
+            if (BedLoadConfig.SHOW_MESSAGE.get()) BedLoad.players().ifPresent(players -> players.forEach(player -> player.displayClientMessage(Component.translatable("info.bedload.remove", chunkX, chunkZ, radius), false)));
         }
-        if (((ChunkLoader)newState.getBlock()).bedLoad$isChunkLoader()) {
-            this.setChunkForced(chunkX, chunkZ, true);
-            if (BedLoadConfig.SHOW_MESSAGE.get()) BedLoad.players().ifPresent(players -> players.forEach(player -> player.displayClientMessage(Component.translatable("info.bedload.add", String.valueOf(chunkX), String.valueOf(chunkZ)), false)));
+
+        if (newLoader.bedLoad$isChunkLoader()) {
+            int radius = newLoader.bedLoad$getChunkLoadRadius();
+            for (int dx = -radius; dx <= radius; dx++) {
+                for (int dz = -radius; dz <= radius; dz++) {
+                    this.setChunkForced(chunkX + dx, chunkZ + dz, true);
+                }
+            }
+            if (BedLoadConfig.SHOW_MESSAGE.get()) BedLoad.players().ifPresent(players -> players.forEach(player -> player.displayClientMessage(Component.translatable("info.bedload.add", chunkX, chunkZ, radius), false)));
         }
     }
 }

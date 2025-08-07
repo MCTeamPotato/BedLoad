@@ -1,5 +1,5 @@
 {
   "info.bedload": "BedLoad Config has reloaded. You need to re-place the blocks for them to be initialized as chunk loaders.",
-  "info.bedload.remove": "Chunk at [%s, %s] has been removed from force-loaded list",
-  "info.bedload.add": "Chunk at [%s, %s] has been added to force-loaded list"
+  "info.bedload.add": "Added chunks centered at (%s, %s) with radius %s",
+  "info.bedload.remove": "Removed chunks centered at (%s, %s) with radius %s"
 }
