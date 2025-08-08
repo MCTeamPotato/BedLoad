@@ -29,10 +29,7 @@ public abstract class ServerLevelMixin {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/core/BlockPos;immutable()Lnet/minecraft/core/BlockPos;")
     )
     private void onChunkLoaderUpdate(BlockPos pos, BlockState oldState, BlockState newState, CallbackInfo ci) {
-        if (!this.getServer().isSameThread()) {
-            this.getServer().execute(() -> bedLoad$execute(pos, oldState, newState));
-            return;
-        }
+        if (!this.getServer().isSameThread()) return;
         bedLoad$execute(pos, oldState, newState);
     }
 
