@@ -1,2 +1,2 @@
-# 1.1.1
-Some minor improvements on logging.
+# 1.1.2
+Fix world freezing.
