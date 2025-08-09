@@ -17,6 +17,7 @@ public class BedLoadConfig {
     public static Map<ResourceLocation, Integer> CHUNK_LOADER_TAGS = new Object2IntOpenHashMap<>();
 
     public static final ForgeConfigSpec.BooleanValue SHOW_MESSAGE;
+    public static final ForgeConfigSpec.BooleanValue IGNORE_WORLD_GEN_BLOCKS;
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -25,6 +26,7 @@ public class BedLoadConfig {
         CHUNK_LOADERS_RAW = builder.defineList("ChunkLoaderBlocks", Lists.newArrayList(), Predicates.alwaysTrue());
         CHUNK_LOADER_TAGS_RAW = builder.defineList("ChunkLoaderBlockTags", Lists.newArrayList("minecraft:beds=1"), Predicates.alwaysTrue());
         SHOW_MESSAGE = builder.define("NotePlayersOnChunkLoaderUpdate", true);
+        IGNORE_WORLD_GEN_BLOCKS = builder.define("IgnoreChunkLoaderBlocksDuringWorldGen", true);
 
         builder.pop();
         CONFIG = builder.build();

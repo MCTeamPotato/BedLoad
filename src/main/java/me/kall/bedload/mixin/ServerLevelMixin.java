@@ -20,21 +20,25 @@ import javax.annotation.Nonnull;
 
 @Mixin(ServerLevel.class)
 public abstract class ServerLevelMixin {
+    @Unique private boolean bedLoad$ignoreWorldGenBlocks;
+
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void onInit(CallbackInfo ci) {
+        this.bedLoad$ignoreWorldGenBlocks = BedLoadConfig.IGNORE_WORLD_GEN_BLOCKS.get();
+    }
+
     @Shadow public abstract boolean setChunkForced(int chunkX, int chunkZ, boolean add);
 
     @Shadow @Nonnull public abstract MinecraftServer getServer();
 
-    @Inject(
-            method = "onBlockStateChange",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/core/BlockPos;immutable()Lnet/minecraft/core/BlockPos;")
-    )
+    @Inject(method = "onBlockStateChange", at = @At("HEAD"))
     private void onChunkLoaderUpdate(BlockPos pos, BlockState oldState, BlockState newState, CallbackInfo ci) {
-        if (!this.getServer().isSameThread()) return;
+        if (!this.getServer().isSameThread() && this.bedLoad$ignoreWorldGenBlocks) return;
         bedLoad$execute(pos, oldState, newState);
     }
 
     @Unique
-    private void bedLoad$execute(BlockPos pos, BlockState oldState, BlockState newState) {
+    private void bedLoad$execute(@NotNull BlockPos pos, @NotNull BlockState oldState, @NotNull BlockState newState) {
         final int chunkX = SectionPos.blockToSectionCoord(pos.getX());
         final int chunkZ = SectionPos.blockToSectionCoord(pos.getZ());
 

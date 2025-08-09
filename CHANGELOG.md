@@ -1,2 +1,2 @@
-# 1.1.2
-Fix world freezing.
+# 1.2.0
+New config option: IgnoreChunkLoaderBlocksDuringWorldGen

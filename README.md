@@ -14,7 +14,7 @@ Default chunk loader: beds.
 	ChunkLoaderBlocks = []
 	ChunkLoaderBlockTags = ["minecraft:beds"]
 	NotePlayersOnChunkLoaderUpdate = true
-
+    IgnoreChunkLoaderBlocksDuringWorldGen = true
 ```
 ## Note
 If you find a chunk loader block cannot work well, try to re-place it.
