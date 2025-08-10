@@ -1,2 +1,2 @@
-# 1.2.0
-New config option: IgnoreChunkLoaderBlocksDuringWorldGen
+# 1.1.3
+Fix codes for IgnoreChunkLoaderBlocksDuringWorldGen=false

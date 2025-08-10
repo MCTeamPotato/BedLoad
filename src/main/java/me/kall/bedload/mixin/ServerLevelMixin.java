@@ -33,8 +33,12 @@ public abstract class ServerLevelMixin {
 
     @Inject(method = "onBlockStateChange", at = @At("HEAD"))
     private void onChunkLoaderUpdate(BlockPos pos, BlockState oldState, BlockState newState, CallbackInfo ci) {
-        if (!this.getServer().isSameThread() && this.bedLoad$ignoreWorldGenBlocks) return;
-        bedLoad$execute(pos, oldState, newState);
+        if (this.getServer().isSameThread()) {
+            bedLoad$execute(pos, oldState, newState);
+        } else {
+            if (this.bedLoad$ignoreWorldGenBlocks) return;
+            this.getServer().execute(() -> bedLoad$execute(pos, oldState, newState));
+        }
     }
 
     @Unique
