@@ -62,8 +62,12 @@ public abstract class ServerLevelMixin {
         final ResourceLocation dim = level.dimension().location();
         final ForceLoadReasons reasons = ForceLoadReasons.get(level);
 
-        for (int dx = -radius; dx <= radius; dx++) {
-            for (int dz = -radius; dz <= radius; dz++) {
+        boolean anyChanged = false;
+        int dxMin = -radius;
+        int dzMin = -radius;
+
+        for (int dx = dxMin; dx <= radius; dx++) {
+            for (int dz = dzMin; dz <= radius; dz++) {
                 long chunkLong = ChunkPos.asLong(centerX + dx, centerZ + dz);
                 long blockLong = pos.asLong();
 
@@ -75,13 +79,21 @@ public abstract class ServerLevelMixin {
                 }
 
                 if (changed) {
+                    anyChanged = true;
                     boolean stillLoaded = reasons.hasAny(dim, chunkLong);
                     this.setChunkForced(centerX + dx, centerZ + dz, stillLoaded);
-
-                    if (BedLoadConfig.SHOW_MESSAGE.get()) BedLoad.note(centerX + dx, centerZ + dz, radius, stillLoaded);
-                    BedLoad.LOGGER.info("Chunk [{}, {}] with radius {} updated: {}", centerX + dx, centerZ + dz, radius, stillLoaded ? "Added" : "Removed");
                 }
             }
+        }
+
+        if (anyChanged) {
+            if (BedLoadConfig.SHOW_MESSAGE.get()) {
+                BedLoad.note(centerX, centerZ, radius, add);
+            }
+            BedLoad.LOGGER.info(
+                    "Chunk [{} ±{}, {} ±{}] with radius {} updated: {}",
+                    centerX, radius, centerZ, radius, radius, add ? "Added" : "Removed"
+            );
         }
     }
 }
