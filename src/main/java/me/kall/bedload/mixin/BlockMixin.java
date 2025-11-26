@@ -1,14 +1,14 @@
 package me.kall.bedload.mixin;
 
-import me.kall.bedload.api.ChunkLoader;
+import me.kall.bedload.ext.ChunkLoader;
 import net.minecraft.world.level.block.Block;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(Block.class)
-public class BlockMixin implements ChunkLoader {
+public abstract class BlockMixin implements ChunkLoader {
     @Unique private boolean bedLoad$isChunkLoader;
-    @Unique private int bedLoad$chunkLoadRadius;
+    @Unique private int bedLoad$chunkLoadRadius = -1;
 
     @Override
     public boolean bedLoad$isChunkLoader() {

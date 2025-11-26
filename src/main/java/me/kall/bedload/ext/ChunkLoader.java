@@ -1,4 +1,4 @@
-package me.kall.bedload.api;
+package me.kall.bedload.ext;
 
 public interface ChunkLoader {
     boolean bedLoad$isChunkLoader();
