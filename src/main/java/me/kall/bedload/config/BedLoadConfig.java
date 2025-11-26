@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import me.kall.bedload.BedLoad;
 import me.kall.bedload.ext.ChunkLoader;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -13,22 +14,21 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import java.util.List;
 import java.util.Map;
 
 public class BedLoadConfig {
-    public static final ForgeConfigSpec CONFIG;
-    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> CHUNK_LOADERS_RAW, CHUNK_LOADER_TAGS_RAW;
+    public static final ModConfigSpec CONFIG;
+    public static final ModConfigSpec.ConfigValue<List<? extends String>> CHUNK_LOADERS_RAW, CHUNK_LOADER_TAGS_RAW;
 
-    public static final ForgeConfigSpec.BooleanValue SHOW_MESSAGE;
-    public static final ForgeConfigSpec.BooleanValue IGNORE_WORLD_GEN_BLOCKS;
+    public static final ModConfigSpec.BooleanValue SHOW_MESSAGE;
+    public static final ModConfigSpec.BooleanValue IGNORE_WORLD_GEN_BLOCKS;
 
     static {
-        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+        ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
         builder.push("BedLoad");
 
         CHUNK_LOADERS_RAW = builder.defineList("ChunkLoaderBlocks", Lists.newArrayList(), Predicates.alwaysTrue());
@@ -67,12 +67,12 @@ public class BedLoadConfig {
             }
         }
 
-        ForgeRegistries.BLOCKS.getValues().stream().map(block -> ((ChunkLoader)block)).forEach(chunkLoader -> {
+        BuiltInRegistries.BLOCK.entrySet().stream().map(entry -> ((ChunkLoader)entry.getValue())).forEach(chunkLoader -> {
             chunkLoader.bedLoad$setChunkLoadRadius(-1);
             chunkLoader.bedLoad$setIsChunkLoader(false);
         });
 
-        for (Map.Entry<ResourceKey<Block>, Block> entry : ForgeRegistries.BLOCKS.getEntries()) {
+        for (Map.Entry<ResourceKey<Block>, Block> entry : BuiltInRegistries.BLOCK.entrySet()) {
             ResourceLocation id = entry.getKey().location();
             Block block = entry.getValue();
 

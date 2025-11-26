@@ -16,25 +16,25 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.server.ServerStartedEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import org.jetbrains.annotations.NotNull;
 
 @Mod(BedLoad.MOD_ID)
 public final class BedLoad {
     public static final String MOD_ID = "bedload";
 
-    public BedLoad(@NotNull FMLJavaModLoadingContext context) {
-        context.registerConfig(ModConfig.Type.COMMON, BedLoadConfig.CONFIG);
+    public BedLoad(@NotNull IEventBus modBus, Dist dist, @NotNull ModContainer container) {
+        container.registerConfig(ModConfig.Type.COMMON, BedLoadConfig.CONFIG);
 
-        IEventBus modBus = context.getModEventBus();
-        IEventBus forgeBus = MinecraftForge.EVENT_BUS;
+        IEventBus forgeBus = NeoForge.EVENT_BUS;
 
         modBus.addListener((ModConfigEvent.Reloading event) -> BedLoadConfig.setup(event.getConfig().getModId().equals(MOD_ID)));
         forgeBus.addListener(this::blockChange);
