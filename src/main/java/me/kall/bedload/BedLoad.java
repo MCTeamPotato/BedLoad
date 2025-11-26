@@ -10,6 +10,7 @@ import me.kall.duplicationless.data.ChunkData;
 import me.kall.duplicationless.event.BlockChangeEvent;
 import me.kall.duplicationless.util.Positions;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -20,6 +21,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
@@ -30,10 +32,10 @@ import org.jetbrains.annotations.NotNull;
 public final class BedLoad {
     public static final String MOD_ID = "bedload";
 
-    public BedLoad(@NotNull FMLJavaModLoadingContext context) {
-        context.registerConfig(ModConfig.Type.COMMON, BedLoadConfig.CONFIG);
+    public BedLoad() {
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, BedLoadConfig.CONFIG);
 
-        IEventBus modBus = context.getModEventBus();
+        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
 
         modBus.addListener((ModConfigEvent.Reloading event) -> BedLoadConfig.setup(event.getConfig().getModId().equals(MOD_ID)));
@@ -98,7 +100,7 @@ public final class BedLoad {
     private static void note(int chunkX, int chunkZ, int radius, boolean add, ServerLevel level) {
         if (!BedLoadConfig.SHOW_MESSAGE.get()) return;
 
-        Component component = Component.translatable(add ? "info.bedload.add" : "info.bedload.remove", chunkX, chunkZ, radius);
+        Component component = new TranslatableComponent(add ? "info.bedload.add" : "info.bedload.remove", chunkX, chunkZ, radius);
         for (ServerPlayer player : level.players()) {
             player.displayClientMessage(component, false);
         }

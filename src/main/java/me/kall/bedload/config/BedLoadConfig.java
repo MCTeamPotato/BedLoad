@@ -7,6 +7,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import me.kall.bedload.BedLoad;
 import me.kall.bedload.ext.ChunkLoader;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -102,7 +103,7 @@ public class BedLoadConfig {
             if (server == null) return;
             BedLoad.dataRebuild(server);
 
-            Component component = Component.translatable("info.bedload");
+            Component component = new TranslatableComponent("info.bedload");
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
                 player.displayClientMessage(component, false);
             }
