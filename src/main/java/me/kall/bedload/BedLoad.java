@@ -18,13 +18,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,17 +37,17 @@ public final class BedLoad {
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
 
-        modBus.addListener((ModConfigEvent.Reloading event) -> BedLoadConfig.setup(event.getConfig().getModId().equals(MOD_ID)));
+        modBus.addListener((ModConfig.Reloading event) -> BedLoadConfig.setup(event.getConfig().getModId().equals(MOD_ID)));
         forgeBus.addListener(this::blockChange);
-        forgeBus.addListener((ServerStartedEvent event) -> BedLoadConfig.setup(true));
-        forgeBus.addListener(EventPriority.HIGHEST, (ServerStartedEvent event) -> dataRebuild(event.getServer()));
+        forgeBus.addListener((FMLServerStartedEvent event) -> BedLoadConfig.setup(true));
+        forgeBus.addListener(EventPriority.HIGHEST, (FMLServerStartedEvent event) -> dataRebuild(event.getServer()));
     }
 
     public static void dataRebuild(@NotNull MinecraftServer server) {
         for (ServerLevel level : server.getAllLevels()) {
             ChunkData<Long, BlockState> chunkData = ForceLoadReasons.get(level);
             ResourceLocation dim = level.dimension().location();
-            LongIterator oldForcedChunks = chunkData.data().getOrDefault(dim, Long2ObjectMaps.emptyMap()).keySet().longIterator();
+            LongIterator oldForcedChunks = chunkData.data().getOrDefault(dim, Long2ObjectMaps.emptyMap()).keySet().iterator();
 
             chunkData.rebuild(level);
 

@@ -16,6 +16,10 @@ import java.util.function.Predicate;
 public class ForceLoadReasons extends ChunkData.BlockData {
     private final Object2ObjectMap<ResourceLocation, Long2ObjectMap<Set<Long>>> data = new Object2ObjectOpenHashMap<>();
 
+    public ForceLoadReasons() {
+        super("BedLoadChunkStorage");
+    }
+
     @Override
     public @NotNull Object2ObjectMap<ResourceLocation, Long2ObjectMap<Set<Long>>> data() {
         return this.data;

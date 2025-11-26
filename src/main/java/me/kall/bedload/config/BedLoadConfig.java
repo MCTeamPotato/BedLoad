@@ -12,11 +12,10 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.List;
 import java.util.Map;
@@ -49,7 +48,7 @@ public class BedLoadConfig {
         for (String name : CHUNK_LOADERS_RAW.get()) {
             try {
                 String[] parts = name.split("=");
-                ResourceLocation blockID = ResourceLocation.parse(parts[0]);
+                ResourceLocation blockID = new ResourceLocation(parts[0]);
                 int radius = Integer.parseInt(parts[1]);
                 chunkLoaders.put(blockID, radius);
             } catch (Exception exception) {
@@ -60,7 +59,7 @@ public class BedLoadConfig {
         for (String name : CHUNK_LOADER_TAGS_RAW.get()) {
             try {
                 String[] parts = name.split("=");
-                ResourceLocation tagID = ResourceLocation.parse(parts[0]);
+                ResourceLocation tagID = new ResourceLocation(parts[0]);
                 int radius = Integer.parseInt(parts[1]);
                 chunkLoaderTags.put(tagID, radius);
             } catch (Exception exception) {
@@ -84,8 +83,7 @@ public class BedLoadConfig {
                 radius = chunkLoaders.getInt(id);
                 isLoader = true;
             } else {
-                for (TagKey<Block> tagKey : block.defaultBlockState().getTags().toList()) {
-                    ResourceLocation tagLoc = tagKey.location();
+                for (ResourceLocation tagLoc : block.getTags()) {
                     if (chunkLoaderTags.containsKey(tagLoc)) {
                         radius = chunkLoaderTags.getInt(tagLoc);
                         isLoader = true;
