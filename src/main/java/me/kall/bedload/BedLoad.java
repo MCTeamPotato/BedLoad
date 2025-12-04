@@ -1,8 +1,5 @@
 package me.kall.bedload;
 
-import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
-import it.unimi.dsi.fastutil.longs.LongIterator;
-import it.unimi.dsi.fastutil.longs.LongSet;
 import me.kall.bedload.config.BedLoadConfig;
 import me.kall.bedload.data.ForceLoadReasons;
 import me.kall.bedload.ext.ChunkLoader;
@@ -10,7 +7,6 @@ import me.kall.duplicationless.data.ChunkData;
 import me.kall.duplicationless.event.BlockChangeEvent;
 import me.kall.duplicationless.util.Positions;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -44,23 +40,12 @@ public final class BedLoad {
 
     public static void dataRebuild(@NotNull MinecraftServer server) {
         for (ServerLevel level : server.getAllLevels()) {
-            ChunkData<Long, BlockState> chunkData = ForceLoadReasons.get(level);
-            ResourceLocation dim = level.dimension().location();
-            LongIterator oldForcedChunks = chunkData.data().getOrDefault(dim, Long2ObjectMaps.emptyMap()).keySet().longIterator();
-
-            chunkData.rebuild(level);
-
-            LongSet newForcedChunks = chunkData.data().getOrDefault(dim, Long2ObjectMaps.emptyMap()).keySet();
-            while (oldForcedChunks.hasNext()) {
-                long nextOldChunk = oldForcedChunks.nextLong();
-                if (!newForcedChunks.contains(nextOldChunk)) level.setChunkForced(ChunkPos.getX(nextOldChunk), ChunkPos.getZ(nextOldChunk), false);
-            }
+            ForceLoadReasons.get(level).rebuild(level);
         }
     }
 
     public void blockChange(@NotNull BlockChangeEvent event) {
         ServerLevel level = event.level();
-        if (BedLoadConfig.IGNORE_WORLD_GEN_BLOCKS.get() && !level.getServer().isSameThread()) return;
 
         long chunk = event.chunkPos();
         long block = event.blockPos();
