@@ -25,7 +25,6 @@ public class BedLoadConfig {
     public static final ModConfigSpec.ConfigValue<List<? extends String>> CHUNK_LOADERS_RAW, CHUNK_LOADER_TAGS_RAW;
 
     public static final ModConfigSpec.BooleanValue SHOW_MESSAGE;
-    public static final ModConfigSpec.BooleanValue IGNORE_WORLD_GEN_BLOCKS;
 
     static {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
@@ -34,7 +33,6 @@ public class BedLoadConfig {
         CHUNK_LOADERS_RAW = builder.defineList("ChunkLoaderBlocks", Lists.newArrayList(), Predicates.alwaysTrue());
         CHUNK_LOADER_TAGS_RAW = builder.defineList("ChunkLoaderBlockTags", Lists.newArrayList("minecraft:beds=1"), Predicates.alwaysTrue());
         SHOW_MESSAGE = builder.define("NotePlayersOnChunkLoaderUpdate", true);
-        IGNORE_WORLD_GEN_BLOCKS = builder.define("IgnoreChunkLoaderBlocksDuringWorldGen", true);
 
         builder.pop();
         CONFIG = builder.build();
