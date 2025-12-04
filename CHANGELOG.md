@@ -1,2 +1,3 @@
-# 1.3.0
-- Rewrite the entire mod using my Duplicationless lib for cleaner codes.
+# 1.3.1
+- Fix crash on world loading
+- Remove IgnoreChunkLoaderBlocksDuringWorldGen config option as it cannot work properly
